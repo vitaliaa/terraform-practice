@@ -1,4 +1,4 @@
-ssh
 *.tfstate.backup
 *.tfstate
-access-key.tf
+.terraform/
+aws_access.tf

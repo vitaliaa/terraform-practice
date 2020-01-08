@@ -1,14 +1,14 @@
 provider "aws" {
-  access_key = "${var.access_key}"
-  secret_key = "${var.secret_key}"
-  region     = "${var.region}"
+  region     = var.aws_region
+  access_key = var.aws_access_key
+  secret_key = var.aws_secret_key
 }
 
 
-resource "aws_instance" "Ubuntu_test" {
+resource "aws_instance" "test" {
   ami                    = "ami-02df9ea15c1778c9c"
   instance_type          = "t2.micro"
-  vpc_security_group_ids = ["${aws_security_group.sec_group.id}"]
+  vpc_security_group_ids =[aws_security_group.sec_group.id]
 
   tags = {
     Name = "Name of instance"
@@ -17,8 +17,8 @@ resource "aws_instance" "Ubuntu_test" {
 
 
 resource "aws_security_group" "sec_group" {
-  name        = "HTTP-HTTPS"
-  description = "HTTP-HTTPS"
+  name        = "HTTP-SSH"
+  description = "HTTP-SSH"
 
   ingress {
     from_port   = 80
@@ -27,12 +27,14 @@ resource "aws_security_group" "sec_group" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-   ingress {
-     from_port   = 443
-     to_port     = 443
-     protocol    = "tcp"
-     cidr_blocks = ["0.0.0.0/0"]
+
+  ingress {
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
   }
+
 
 
   egress {
