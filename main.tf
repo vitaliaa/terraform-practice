@@ -6,7 +6,7 @@ provider "aws" {
 
 
 resource "aws_instance" "test" {
-  ami                    = "ami-02df9ea15c1778c9c"
+  ami                    = var.ami
   instance_type          = "t2.micro"
   vpc_security_group_ids = [aws_security_group.sec_group.id]
 
