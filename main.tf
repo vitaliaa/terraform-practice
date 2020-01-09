@@ -1,20 +1,25 @@
 provider "aws" {
-  region     = var.aws_region
-  access_key = var.aws_access_key
-  secret_key = var.aws_secret_key
+  region     = "${var.aws_region}"
+  access_key = "${var.aws_access_key}"
+  secret_key = "${var.aws_secret_key}"
 }
 
 
 resource "aws_instance" "test" {
-  ami                    = var.ami
+  ami                    = "ami-02df9ea15c1778c9c"
   instance_type          = "t2.micro"
   vpc_security_group_ids = [aws_security_group.sec_group.id]
+  key_name               = "terraform_ec2_key"
 
   tags = {
     Name = "Name of instance"
   }
 }
 
+resource "aws_key_pair" "terraform_ec2_key" {
+  key_name   = "terraform_ec2_key"
+  public_key = "${file("../.ssh/id_rsa.pub")}"
+}
 
 resource "aws_security_group" "sec_group" {
   name        = "HTTP-SSH"
