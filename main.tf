@@ -14,11 +14,21 @@ resource "aws_instance" "test" {
   tags = {
     Name = var.name_of_instance
   }
+  
+	user_data = <<EOF
+#!/bin/bash
+sudo apt -y update
+sudo apt -y install apache2
+myip=`curl http://169.254.169.254/latest/meta-data/local-ipv4`
+echo "<h2>WebServer IP: $myip</h2>" > /var/www/html/index.html
+sudo systemctl start apache2 
+EOF
+
 }
 
 resource "aws_key_pair" "terraform_ec2_key" {
   key_name   = "terraform_ec2_key"
-  public_key = file("../.ssh/id_rsa.pub")
+  public_key = file("~/.ssh/id_rsa.pub")
 }
 
 resource "aws_security_group" "sec_group" {
