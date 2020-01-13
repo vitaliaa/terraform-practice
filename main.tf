@@ -14,15 +14,8 @@ resource "aws_instance" "test" {
   tags = {
     Name = var.name_of_instance
   }
-  
-	user_data = <<EOF
-#!/bin/bash
-sudo apt -y update
-sudo apt -y install apache2
-myip=`curl http://169.254.169.254/latest/meta-data/local-ipv4`
-echo "<h2>WebServer IP: $myip</h2>" > /var/www/html/index.html
-sudo systemctl start apache2 
-EOF
+
+  user_data = file("./user_data.sh") 
 
 }
 
